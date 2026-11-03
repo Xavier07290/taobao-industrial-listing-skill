@@ -2,7 +2,7 @@
 name: taobao-industrial-listing-skill
 description: Create high-quality Taobao industrial-product listing assets using authentic product photos, manufacturer specifications and competitor layout references. Use for 淘宝工业品主图、详情页、白底图、竞品版式参考、上品素材包 and product listing preparation. Prioritizes faithful product compositing, high-fidelity layout analysis, individually designed images and verified file delivery.
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
   language: zh-CN
   scope: universal-industrial-products
 ---
@@ -85,7 +85,21 @@ UNVERIFIED 不得出现在图片、标题或详情页的事实性陈述中。规
 - 背景材质、配色比例、明暗对比和视觉节奏；
 - 竞品每张图试图解决的买家疑问。
 
-用户选择“高度参考竞品版式”时，必须尽量保留上述通用版式关系与信息组织，不要只提取几个卖点后完全另起一套普通卡片。使用归一化坐标（0–1000）描述元素位置与尺寸，便于跨分辨率复用。
+用户选择“高度参考竞品”或“高度参考竞品版式”时，必须执行下述 REFERENCE LAYOUT LOCK，不要只提取几个卖点后完全另起一套普通卡片。使用归一化坐标（0–1000）描述元素位置与尺寸，便于跨分辨率复用。
+
+#### 竞品视觉基准锁定（REFERENCE LAYOUT LOCK）
+
+当用户选择“高度参考竞品”时：
+
+- 必须锁定参考图的整体构图和产品占比。
+- 不得擅自改变背景明暗关系、标题位置和产品视觉重心。
+- 不得把竞品的融合式产品广告改造成左右分栏的信息海报。
+- 可以替换产品、文字和品牌，但不能随意推翻已经选定的版式结构。
+- 若生成结果与参考图的视觉结构明显不符，必须判定为不合格并重新制作。
+
+逐图记录参考图编号、整体构图、产品区域与占比、背景明暗分区、标题坐标和产品视觉重心，写入 competitor_analysis.md 与 design_master.md。锁定结构优先于默认黑红配色、产品35%–65%占比或通用分栏模板；只有用户明确改选参考或批准调整后才能变更锁定项。替换产品时仍须保持真实产品自身比例和结构，不得为贴合竞品轮廓拉伸或重绘产品，也不得复制竞品品牌、产品像素或专有素材。
+
+每张成品与对应参考图并排核对锁定项，在 qa_report.md 的 VISUAL_QA 中记录 REFERENCE_LAYOUT_QA 为 PASS / FAIL / PENDING 及差异。明显偏离必须记为 FAIL 并重做该张；未完成比对记为 PENDING，均不得标为 FINAL 或整套通过。机器尺寸及ZIP检查不能代替此项视觉检查。素材或工具不足以同时满足真实产品保真与版式锁定时，说明缺口并请求补充素材或调整方向，不得自行降级改版。
 
 允许参考一般构图、信息层级、分区、产品占比和阅读路径；必须替换本商品产品主体、品牌、文案、参数、图标和专有视觉素材。不得复制竞品 Logo、完整文案、受保护插画或对方产品像素。
 

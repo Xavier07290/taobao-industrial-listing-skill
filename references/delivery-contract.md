@@ -64,6 +64,8 @@ qa_report.md 分为 MACHINE_QA、VISUAL_QA、FACT_QA 三部分。必须检查：
 
 视觉或事实检查未完成时必须标记 PENDING，不得把机器 PASS 说成整套成品 PASS。
 
+用户选择“高度参考竞品”时，必须按 SKILL.md 的 REFERENCE LAYOUT LOCK 核对整体构图、产品占比、背景明暗关系、标题位置及产品视觉重心。不得将融合式产品广告改为左右分栏信息海报。qa_report.md 的 VISUAL_QA 必须记录逐图 REFERENCE_LAYOUT_QA 与差异；明显不符为 FAIL，须重新制作，未核对为 PENDING。两者都不得标为 FINAL 或整套交付通过。
+
 ## 禁止的交付假象
 
 - 用一张拼版冒充五张主图；

@@ -88,7 +88,7 @@ def main()->int:
                             if any(channel.getbbox() is not None for channel in diff.split()): issues.append(f"LONG CONTENT MISMATCH: {n}")
                         y+=sizes[n][1]
             except Exception as exc: issues.append(f"LONG COMPARE ERROR: {exc}")
-    manifest={"version":"1.3.0","status":"FAIL" if issues else "MACHINE_PASS",
+    manifest={"version":"1.3.1","status":"FAIL" if issues else "MACHINE_PASS",
               "product":args.product or folder.name,"required_count":len(REQUIRED),
               "verified_count":len(entries),"files":entries,"issues":issues,
               "note":"Machine checks do not verify product authenticity, facts, Chinese text meaning or visual quality."}
