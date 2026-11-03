@@ -1,45 +1,35 @@
-# 安装与使用说明
+# 安装与使用说明（V1.2）
 
-本仓库遵循常见 Agent Skills 文件夹布局，主入口为根目录的 `SKILL.md`。这份 Skill 用于批量制作工业品淘宝图片与上品资料，**不是已经连接千牛的自动上架机器人**。
+本仓库是跨 Agent 的工业品图片与淘宝上品素材 Skill。主入口为 SKILL.md。Skill 提供工作流、规范和辅助脚本，不会自动获得图像生成、电脑控制或千牛发布权限。
 
 ## Codex
 
-将仓库克隆或复制到项目的 `.agents/skills/taobao-industrial-listing-skill/`，然后在Codex中指名本Skill。若客户端没有图像生成、图层合成和导出工具，需要另配相应能力。
+将仓库克隆或复制到项目的 .agents/skills/taobao-industrial-listing-skill/。在 Codex 中明确调用 taobao-industrial-listing-skill。项目内需要有可用的图像生成/编辑能力；运行图层合成和质检脚本需要 Python 3.10+ 与 Pillow。
 
 ## Claude Code
 
-将本文件夹放到项目 `.claude/skills/taobao-industrial-listing-skill/`，然后在Claude Code中调用。实际功能由运行环境支持的工具决定。
+将仓库放到项目的 .claude/skills/taobao-industrial-listing-skill/，然后在 Claude Code 中调用。实际图像能力以当前客户端支持的工具为准。
 
 ## ChatGPT
 
-自定义Skill安装入口随账户与工作空间权限而异。若有自定义Skills导入能力，可导入完整文件夹或压缩包；否则在支持的工作空间用此说明作为参考，不能把普通对话中提及名称当作已安装。
+自定义 Skill 的导入入口取决于当前账户、客户端和工作空间功能。将完整仓库作为 Skill 导入后才能按名称调用；仅在对话里提到 Skill 名称不代表它已安装。
+
+## 安装图片脚本依赖
+
+在仓库根目录运行：
+
+    python -m pip install -r requirements.txt
+
+脚本说明：
+- scripts/render_layout.py：将背景、真实产品图层、图形和准确文字合成；
+- scripts/compose_detail_long.py：把八屏详情图无损拼接成长图；
+- scripts/make_contact_sheet.py：从最终独立图片生成可选总览；
+- scripts/verify_and_package.py：检查15张PNG并打包ZIP。
 
 ## 调用示例
 
-```text
-调用 taobao-industrial-listing-skill 的 IMAGE_PACK 模式。
-当前产品实拍、厂家参数表、同类竞品图已提供。
-参考竞品营销卖点和版式，采用黑红白工业电商风。
-严格锁定我自己的产品外观、铭牌与配件数量。
-生成五张独立3:4主图、白底图及八屏详情长图。
-技术参数必须可证实，并附带QA报告。
-```
+调用 taobao-industrial-listing-skill 的 IMAGE_PACK 模式。当前附件包括真实产品图、厂家参数、同类竞品图和风格参考。请高度参考竞品的通用版式、构图和信息层级，使用真实产品图层，参数和中文后期准确排版。质量优先，先做一张核心成交图供我审核，确认后再逐张制作五张主图、白底图、八屏详情页和长图。最后运行QA并提供每张独立图片和ZIP。
 
-## 使用边界
+## 产品发布边界
 
-本仓库不包含淘宝账号密码、Cookie、内部采购价、厂家全量报价表，也不包括品牌官方授权的声明。正式商品发布前，应检查图片、Logo、技术宣称和商品数据。
-
-## 图片生成完成后的下载检查（V1.1）
-
-用户需要分别保存5张主图。**不要只给一张包含所有图的总览图片**，也不要给只有文案说明、没有实际图片文件的ZIP。
-
-有文件系统和图片处理工具的Agent，运行：
-
-```bash
-pip install pillow
-python scripts/verify_and_package.py outputs/HSZ --product HSZ
-```
-
-只有成功显示 PASS 后，才能向用户提供真实ZIP下载链接。单个 `main_01.png` 至 `main_05.png`、白底图、分屏详情和拼接长图应分别可下载。无法落盘或导出时，应明确说明哪些文件尚未生成；禁止宣称已完成。
-
-参考 `references/delivery-contract.md`。请勿为了独立导出，把精致黑红工业营销视觉降级为普通PPT式的简易排版。
+本仓库不包含淘宝账号密码、Cookie或厂家机密资料。正式上架前必须由用户核实标题、价格、库存、运费、参数、售后、品牌授权和图片使用权。没有明确授权和浏览器操作工具时，不得声称已经发布商品。
