@@ -1,53 +1,58 @@
 # 淘宝工业品主图与详情页生成 Skill
 
-一套面向淘宝工业品与五金机电商家的可复用 Agent Skill，支持手拉葫芦、手扳葫芦、电动葫芦、搬运车、卷扬机、千斤顶、磁力吊、吊装索具等多种产品。
+一套跨 Agent 可复用的淘宝工业品视觉生产与上品资料工作流，适用于手拉葫芦、手扳葫芦、电动葫芦、搬运车、卷扬机、千斤顶、磁力吊、钢丝绳、吊装索具及五金机电产品。
 
-**核心输入：真实产品照片 + 厂家参数表 + 同类竞品主图/详情截图。**
+**输入：**真实产品照片 + 厂家参数/Excel + 同类竞品图片 + 用户认可的风格参考。
 
-**默认输出：**5张独立3:4商品主图（建议1440×1920）、1张白底图、8屏详情页及完整长图。可选生成标题、SKU建议、商家编码和上品前质检报告。
+**V1.2 默认输出：**5张独立3:4主图、1张白底图、8张独立详情屏、1张详情长图、设计蓝图、事实表和QA报告。完整ZIP只有在真实文件全部通过检查后才生成。
+
+## V1.2 的核心变化
+
+- **质量优先、先审核再批量：**先完成一张核心成交图，用户确认设计方向后再继续整套图片。
+- **高度参考竞品版式：**分析构图、版面分区、产品占比、标题位置、信息层级、卖点卡片和阅读路径；保留通用版式逻辑，替换本商品的产品、品牌、文字和素材。
+- **真实产品锁定：**产品主体使用用户实拍原图抠图和图层合成，不让生成模型重新绘制机械产品。
+- **确定性排版：**中文、型号、铭牌、数字、单位和参数表使用准确文本后期排版。
+- **真正可复用的工具：**增加 Pillow 图层合成、详情长图拼接、总览生成和严格文件验证脚本。
+- **机器检查与视觉检查分离：**尺寸检查通过不代表产品外观、参数或视觉质量已经通过。
 
 ## 核心规则
 
-- **产品真实外观锁定：**不重画、不增删吊钩/链条/零件、不改颜色/铭牌/Logo/比例；优先真实图片抠图与分层合成。
-- **竞品参考只提炼营销逻辑：**可学习卖点方向、构图、信息层级，但不直接复制品牌、图像、完整文案。
-- **参数必须可核验：**厂家资料或铭牌未确认的“双刹车”“G80链条”等不得擅自写入。
-- **视觉统一：**黑红白工业电商风，真实产品主体、清晰细节与参数表。
-- **先质检后上品：**图片、技术事实、中文字、尺寸与平台合规逐项检查。
+1. 产品真实外观以用户上传的真实产品图为唯一依据。
+2. 技术参数只使用厂家资料、铭牌或用户明确确认的信息。
+3. 竞品图用于高参考度学习版式和营销逻辑，不复制品牌、完整文案或专有图稿。
+4. 五张主图必须分别制作和导出，不能从总拼版裁切。
+5. 详情页先制作八张独立屏，再无损拼接成长图。
+6. 任何未完成或未通过检查的文件都必须如实标记。
 
 ## 快速调用
 
-> 调用 `taobao-industrial-listing-skill` 的 IMAGE_PACK 模式。用我提供的真实产品图、厂家参数及同类竞品图，参考竞品卖点和版式，按黑红工业风生成5张独立3:4主图、白底图和8屏详情长图。产品外观与铭牌不允许改变，未知参数不要编造。
+调用 taobao-industrial-listing-skill 的 IMAGE_PACK 模式。使用我提供的真实产品图、厂家参数、同类竞品图片和风格参考。高度参考竞品的版式、信息层级和构图，采用黑红工业风，质量优先。先完成一张核心成交图供我审核；确认后再逐张生成五张独立主图、白底图、八屏详情页和完整长图。产品必须使用真实图层合成，参数和中文必须准确排版，最后提供单张图片与通过检查的ZIP。
 
-## 主要文件
+## 文件结构
 
-- [SKILL.md](SKILL.md)：Agent Skills 主入口
-- [references/production-workflow.md](references/production-workflow.md)：各类工业品制作步骤
-- [references/prompt-templates.md](references/prompt-templates.md)：图片编辑与排版提示词
-- [references/visual-system.md](references/visual-system.md)：视觉设计规范
-- [examples/hst-golden-sample.md](examples/hst-golden-sample.md)：HS-T案例使用原则
-- [安装说明](README-安装说明.md)：Codex、Claude Code、ChatGPT等使用方法
+- SKILL.md：跨 Agent 主入口
+- references/delivery-contract.md：交付条件与禁止事项
+- references/production-workflow.md：V1.2生产流程
+- references/visual-system.md：竞品版式映射和视觉系统
+- references/prompt-templates.md：背景、产品合成和排版提示
+- references/competitor-layout-analysis-template.md：竞品拆解模板
+- references/design-master-template.md：设计蓝图模板
+- examples/layout-example.json：图层合成示例
+- scripts/render_layout.py：确定性图层合成
+- scripts/compose_detail_long.py：详情页拼接
+- scripts/make_contact_sheet.py：总览预览
+- scripts/verify_and_package.py：图片检查与ZIP打包
 
 ## 安装
 
-下载或克隆本仓库，将文件夹放入支持 Agent Skills 的客户端技能目录。例如 Codex 项目的 `.agents/skills/taobao-industrial-listing-skill/`、Claude Code 项目的 `.claude/skills/taobao-industrial-listing-skill/`。
+将仓库克隆或复制到支持 Agent Skills 的客户端技能目录。Codex、Claude Code 等客户端的具体目录和调用方式见 README-安装说明.md。普通对话中提及 Skill 名称并不代表客户端已经安装它。
 
-Skill 是流程与规则，不会自动附加图像生成、抠图或浏览器操作权限。要精确保留产品外观，须使用支持真实图层合成的工具。
+图层合成和质检脚本需要 Python 3.10+ 与 Pillow：
 
-## 免责声明
+    python -m pip install -r requirements.txt
 
-这是独立的通用电商图片工作流，不代表任何品牌官方或平台授权。示例产品和品牌信息仅用于描述制作方法。实际发布前应人工核对产品规格、技术参数、图片权利及宣传内容。
+## 能力边界
 
+Skill 是生产规范和辅助脚本，不是图像模型或自动上架权限。背景生成、产品抠图和视觉审核仍依赖当前 Agent 可用的图像工具。严格保真时，产品图必须作为独立真实图层合成；单纯文字提示不能保证模型不改变机械结构。
 
-## V1.1 更新：不再把拼版当作图片交付
-
-用户喜欢的黑红工业多图拼版仅作为**视觉质量参考**。完成制作必须交付：
-
-- `main_01.png` ... `main_05.png`：**五张独立的1440×1920原生高清主图**，每张可以单独保存上传淘宝；
-- `white_bg.png`：独立1440×1440白底图；
-- `detail_01.png` ... `detail_08.png`：独立宽1440的详情屏图；
-- `detail_long.png`：由八屏图片无损拼接的完整长图；
-- 经 `scripts/verify_and_package.py` 校验通过的真实ZIP文件。
-
-任何总拼图只是 `preview_contact_sheet.png` 预览，不能代替原图，不能裁切小图放大充当高清。**风格继续保持精致的黑红工业广告质感，不能退化成文字信息卡。**
-
-详见 [交付契约](references/delivery-contract.md)。
+淘宝正式发布、价格、库存、物流和售后承诺必须由用户核实并授权。
