@@ -1,14 +1,17 @@
 ---
 name: taobao-industrial-listing-skill
 description: Create high-quality Taobao industrial-product listing assets using authentic product photos, manufacturer specifications and competitor layout references. Use for 淘宝工业品主图、详情页、白底图、竞品版式参考、上品素材包 and product listing preparation. Prioritizes faithful product compositing, high-fidelity layout analysis, individually designed images and verified file delivery.
-compatibility: Requires an image generation or editing tool. For deterministic typography, compositing and export, Python 3.10+ and Pillow are recommended. Browser publication is optional and requires a separately authorized browser/computer-use tool.
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
   language: zh-CN
   scope: universal-industrial-products
 ---
 
 # 淘宝工业品图片与上品素材 Skill
+
+V1.3 在 V1.2 规范上包含已验证的图片合成、透明长图、像素判重、输入保护与可靠打包修复；未包含审计报告中所有后续建议。版本范围见 `docs/V1.3_RELEASE.md`；运行与复测见 `docs/LOCAL_RUN.md`。
+
+运行要求：需要图像生成或编辑工具；确定性排版、合成与导出需要 Python 3.10+ 和 Pillow。浏览器发布为可选能力，必须另行获得授权并具备对应工具。
 
 ## 目标
 

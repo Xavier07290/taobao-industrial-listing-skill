@@ -21,6 +21,10 @@ def load_font(path, size):
     return ImageFont.truetype(str(p), size=size)
 
 def fit_image(src, w, h, mode):
+    if mode not in ("contain", "cover", "stretch"):
+        raise ValueError(f"Unsupported image fit: {mode}")
+    if w <= 0 or h <= 0:
+        raise ValueError("Image layer dimensions must be positive")
     src = src.convert("RGBA")
     if mode == "stretch":
         return src.resize((w,h), Image.Resampling.LANCZOS)
@@ -47,7 +51,8 @@ def main():
             p=Path(layer["path"])
             if not p.is_file(): raise FileNotFoundError(f"Layer {i}: {p}")
             w=int(layer["width"]); h=int(layer["height"])
-            im=fit_image(Image.open(p),w,h,layer.get("fit","contain"))
+            with Image.open(p) as source:
+                im=fit_image(source,w,h,layer.get("fit","contain"))
             canvas.alpha_composite(im,(x,y))
         elif t in ("rect","ellipse","line"):
             d=ImageDraw.Draw(canvas)
@@ -66,7 +71,7 @@ def main():
             align=layer.get("align","left"); valign=layer.get("valign","top")
             tx=x if align=="left" else (x+(w-tw)//2 if align=="center" else x+w-tw)
             ty=y if valign=="top" else (y+(h-th)//2 if valign=="middle" else y+h-th)
-            d.multiline_text((tx,ty),text,font=font,fill=color(layer.get("color","#FFFFFF")),spacing=int(layer.get("spacing",8)),align=align,stroke_width=int(layer.get("stroke_width",0)),stroke_fill=color(layer.get("stroke_fill","#000000")))
+            d.multiline_text((tx-bbox[0],ty-bbox[1]),text,font=font,fill=color(layer.get("color","#FFFFFF")),spacing=int(layer.get("spacing",8)),align=align,stroke_width=int(layer.get("stroke_width",0)),stroke_fill=color(layer.get("stroke_fill","#000000")))
         else: raise ValueError(f"Unsupported layer type: {t}")
     args.output.parent.mkdir(parents=True,exist_ok=True)
     canvas.convert("RGB").save(args.output,format="PNG",optimize=True)

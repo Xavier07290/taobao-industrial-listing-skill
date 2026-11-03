@@ -1,5 +1,7 @@
 # 淘宝工业品主图与详情页生成 Skill
 
+当前版本 **V1.3.0**：在下述 V1.2 工作流上加入已测试的工程修复，范围见 [docs/V1.3_RELEASE.md](docs/V1.3_RELEASE.md)。
+
 一套跨 Agent 可复用的淘宝工业品视觉生产与上品资料工作流，适用于手拉葫芦、手扳葫芦、电动葫芦、搬运车、卷扬机、千斤顶、磁力吊、钢丝绳、吊装索具及五金机电产品。
 
 **输入：**真实产品照片 + 厂家参数/Excel + 同类竞品图片 + 用户认可的风格参考。
@@ -50,6 +52,8 @@
 图层合成和质检脚本需要 Python 3.10+ 与 Pillow：
 
     python -m pip install -r requirements.txt
+
+本地脚本命令与隔离测试见 [docs/LOCAL_RUN.md](docs/LOCAL_RUN.md)，V1.2 工程审计、测试结果及修复记录见 [docs/V1.2_AUDIT.md](docs/V1.2_AUDIT.md)。
 
 ## 能力边界
 
