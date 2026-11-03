@@ -1,0 +1,61 @@
+{
+  "canvas": {
+    "width": 1440,
+    "height": 1920,
+    "background": "#15171A"
+  },
+  "layers": [
+    {
+      "type": "image",
+      "path": "working/background.png",
+      "x": 0,
+      "y": 0,
+      "width": 1440,
+      "height": 1920,
+      "fit": "cover"
+    },
+    {
+      "type": "image",
+      "path": "working/product_cutout.png",
+      "x": 650,
+      "y": 280,
+      "width": 690,
+      "height": 1280,
+      "fit": "contain"
+    },
+    {
+      "type": "rect",
+      "x": 70,
+      "y": 90,
+      "width": 520,
+      "height": 12,
+      "fill": "#E42226"
+    },
+    {
+      "type": "text",
+      "text": "手拉葫芦",
+      "x": 70,
+      "y": 180,
+      "width": 520,
+      "height": 150,
+      "font": "/path/to/chinese-bold.ttf",
+      "font_size": 112,
+      "color": "#FFFFFF",
+      "align": "left",
+      "valign": "middle"
+    },
+    {
+      "type": "text",
+      "text": "真实产品外观以实物为准",
+      "x": 70,
+      "y": 1750,
+      "width": 1300,
+      "height": 70,
+      "font": "/path/to/chinese-regular.ttf",
+      "font_size": 34,
+      "color": "#B9BEC4",
+      "align": "left",
+      "valign": "middle"
+    }
+  ]
+}
