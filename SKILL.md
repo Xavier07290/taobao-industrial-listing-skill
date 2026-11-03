@@ -3,7 +3,7 @@ name: taobao-industrial-listing-skill
 description: Generate conversion-oriented Taobao e-commerce product assets and listing materials for industrial goods, lifting equipment, hardware and machinery from authentic user product photos, manufacturer specs and competitor references. Trigger when asked for 淘宝主图、淘宝详情长图、白底图、上品素材、工业品详情页、竞品参考改风格、HS-T风格 or bulk product imagery. Make five 3:4 main images, a white-background product image and an eight-section long detail page; never alter the actual product or invent technical claims.
 compatibility: Requires an image-generation or image-editing tool. Faithful product compositing and exact typography may require an image editor. Browser publication is optional and requires a separate authorized browser/computer-use tool.
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
   language: zh-CN
   scope: universal-industrial-products
 ---
@@ -15,6 +15,16 @@ metadata:
 将 **真实产品原图 + 厂家资料/Excel + 同产品竞品图片** 转换为原创、统一视觉的淘宝商品素材包。可跨手拉葫芦、手扳葫芦、电动葫芦、卷扬机、提升机、搬运车、千斤顶、永磁吸盘、钢丝绳、吊索具、五金机电等品类重复使用。**不要把 HS-T 产品卖点或结构复制给其他型号。**
 
 用户通常通过“调用淘宝工业品图片 Skill，按之前 HS-T 黑红工业风生成”触发。如果用户只要图片，直接执行图片模式；只有明确要求上品资料/后台操作时才进入完整模式。
+
+## 核心交付要求（优先阅读）
+
+**先阅读并执行 `references/delivery-contract.md`，其规则优先于任何拼版展示、图片预览或文字报告。**
+
+**用户认定的“黑红工业电商多图拼版”是视觉质量与设计系统参考，不是可上传的商品图文件。** 默认实际成品必须逐张独立导出：`main_01.png` 到 `main_05.png`（各1440×1920，3:4），`white_bg.png`（1440×1440），`detail_01.png` 到 `detail_08.png`（各宽1440），以及独立 `detail_long.png`（宽1440），共 **15个**核心PNG文件。
+
+**禁止将一张拼贴/九宫格/总览图当成完成的图片包；禁止从低分辨率预览裁图后拉伸冒充高清单张；禁止以简陋文字卡片代替用户认可的精致工业视觉。** 预览 `preview_contact_sheet.png` 只是可选附加产物，必须由真实的15个独立图片生成。
+
+有文件与打包能力时先运行 `scripts/verify_and_package.py` 检查和打包，确认真实存在的路径后给用户每张图和ZIP的独立下载链接。没有能力时应明确说明未完成内容，并优先逐张独立生成，不得制造虚假链接。
 
 ## 模式
 
@@ -55,7 +65,7 @@ metadata:
 
 默认 **红 + 黑 + 白 + 炭灰 + 金属银** 工业风。产品是主体，不让背景掩盖它。高对比中文大标题、稳重金属材质氛围、真实厂房/仓储环境、红色标签与细线条、清晰表格与局部特写，整体专业而非花哨。五张图一致而不雷同。参考 `references/visual-system.md`。如需视觉样例，可参考 `examples/hst-golden-sample.md` 中的风格说明，示例不代表技术事实。
 
-### 4. 为当前型号单独制作五张主图（不是一张拼贴）
+### 4. 为当前型号单独制作五张主图（不是一张拼贴，也不是只裁切预览）
 
 | 文件 | 目标 | 内容 |
 |---|---|---|
@@ -65,7 +75,7 @@ metadata:
 | main_04.png | 使用场景图 | 1–4个合理场景，安全作业，不以夸张吊装宣传错误能力 |
 | main_05.png | 下单须知图 | 规格确认、运费规则（仅确有依据）、非标客服、批量采购、开票（若支持） |
 
-所有主图 **单独导出 3:4（建议 1440×1920）**，至少做到当前淘宝页面要求的分辨率。不要五张合成一个五连图。无需为了画面填满而创造更多规格或夸大话术。
+所有主图 **分别构图、分别生成、分别导出 1440×1920 原生3:4高清文件**；不得把一张大拼版裁成低清图片或把缩略图拉伸到目标尺寸。视觉仍须达到参考拼版里的高品质黑红工业营销效果，而非简单信息卡或粗糙表格。无需为了画面填满而创造更多规格或夸大话术。
 
 ### 5. 白底图
 
@@ -84,7 +94,7 @@ metadata:
 7. 下单须知：选型、安全、非标、物流、售后边界；
 8. 客服CTA：询问额定负载、工作高度、用途、地址等。
 
-图文应适合手机阅读；中文字不要太小；参数表优先用可编辑文字叠加以保证准确（不要依赖模型生成长表格中文字）。
+图文应适合手机阅读；中文字不要太小；参数表优先用可编辑文字叠加以保证准确（不要依赖模型生成长表格中文字）。长图不能只提供一张“详情页预览小图”，应先生成八屏真实高清原图，再拼接长图。
 
 ### 7. 商品资料（LISTING_PACK）
 
@@ -104,16 +114,19 @@ metadata:
 - **OUTPUT**：5张独立3:4主图、白底图、详情图齐全；符合尺寸；手机端清晰；
 - **COPY**：不冒充竞品、授权商/厂家；无虚假宣传与不安全场景。
 
-生成 `qa_report.md` 列出检查结果、无法证实字段、需要用户核验的图片/技术点；不要虚称“已100%锁定”。对关键事实错误宁可延迟上架也不冒险发布。
+生成 `qa_report.md` 列出检查结果、无法证实字段、需要用户核验的图片/技术点；不要虚称“已100%锁定”。此外检查全部15张必需图片的实际像素、不同文件内容与可下载性；若无法导出真实文件，不得假称 ZIP 已完成。对关键事实错误宁可延迟上架也不冒险发布。
 
 ## 输出目录约定
 
 ```
 outputs/<model-or-product-slug>/
-  main_01.png ... main_05.png
-  white_bg.png
-  detail_01.png ... detail_08.png
-  detail_long.png
+  main_01.png ... main_05.png     # 各1440×1920、独立生成
+  white_bg.png                   # 1440×1440
+  detail_01.png ... detail_08.png # 各宽1440
+  detail_long.png                # 从八屏高清图片拼接
+  preview_contact_sheet.png     # 可选，纯预览，不可作为成品
+  manifest.json                 # 校验工具产生
+  <product>_taobao_listing_images.zip
   listing.md                 # 仅 LISTING_PACK 必需
   qa_report.md
 ```
@@ -122,6 +135,8 @@ outputs/<model-or-product-slug>/
 
 ## 参考与调用
 
+- **文件交付契约（最优先）：`references/delivery-contract.md`**
+- 图片输出检查与ZIP打包：`scripts/verify_and_package.py`
 - 完整制作规范与行业差异：`references/production-workflow.md`
 - 视觉与版式：`references/visual-system.md`
 - 图像模型/编辑器使用提示模板：`references/prompt-templates.md`
@@ -129,4 +144,4 @@ outputs/<model-or-product-slug>/
 
 **调用示例**：
 
-> 调用 `taobao-industrial-listing-skill` 的 IMAGE_PACK 模式。这是 [产品型号]。真实产品图、厂家参数和同行图已附。请从竞品提炼版式与卖点候选，只使用当前型号已验证卖点；保留原图产品外观，制作5张独立1440×1920主图、白底图和八屏详情长图，黑红工业风；完成后输出QA报告。
+> 调用 `taobao-industrial-listing-skill` 的 IMAGE_PACK 模式。这是 [产品型号]。真实产品图、厂家参数和同行图已附。请从竞品提炼版式与卖点候选，只使用当前型号已验证卖点；保留原图产品外观，制作5张独立1440×1920主图、白底图和八屏详情长图，黑红工业风；完成后每张分别提供可下载原图链接和一个已验证包含15张图片的ZIP下载链接；拼版仅用于预览，不能代替单张图片。完成后输出QA报告。
